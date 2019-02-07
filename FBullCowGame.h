@@ -2,15 +2,21 @@
 // Created by Danny Tharma on 2019-02-06.
 //
 
+/**
+ * The game logic (no view code or direct user interaction)
+ * The game is a simple guess the word game based on Mastermind
+ */
+
+#pragma once
 #ifndef BULLSCOWS_FBULLCOWGAME_H
 #define BULLSCOWS_FBULLCOWGAME_H
 #include <string>
 
 // do not use namespace in a header file
+// to make syntax Unreal friendly
 using FString = std::string;
 using int32 = int;
 
-// two values initialized to zero
 struct FBullCowCount
 {
     int32 Bulls{0};
@@ -37,7 +43,7 @@ public:
     bool isGameWon() const;
     EGuessStatus CheckGuessValidity(FString) const;
 
-    void Reset();   // TODO make a more rich return value
+    void Reset(int32);
     FBullCowCount SubmitValidGuess(FString);     // counts bulls & cows, and increasing try # assuming valid guess
 
 
@@ -46,7 +52,6 @@ private:
     // don't expose variables
     // see constructor for initialization
     int32 MyCurrentTry;
-    int32 MyMaxTries;
     FString MyHiddenWord;
     bool bGameIsWon;
 

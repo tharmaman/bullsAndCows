@@ -2,29 +2,37 @@
 // Created by Danny Tharma on 2019-02-06.
 //
 
+#pragma once
 #include "FBullCowGame.h"
 #include <map>
+#include <iostream>
 // preprocessor directive for cut and past (identifier and replacement)
 #define TMap std::map
 
-FBullCowGame::FBullCowGame() { Reset(); }
+FBullCowGame::FBullCowGame() {}   // default constructor
 
 
 // const here prevents method from changing any values
 // acts as a guard in place
-int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
 bool FBullCowGame::isGameWon() const { return bGameIsWon; }
 
-void FBullCowGame::Reset()
+int32 FBullCowGame::GetMaxTries() const {
+    TMap<int32,int32> WordLengthToMaxTries { {3,4}, {4,7}, {5,10}, {6,16}};
+    return WordLengthToMaxTries[GetHiddenWordLength()];
+}
+
+
+void FBullCowGame::Reset(int32 difficulty)
 {
+    // creating array of words
+    TMap<int32,FString> LengthToWord {{3, "dog"}, {4, "tank"}, {5, "ghoul"}, {6, "planet"}};
+
     // constexpr then const if too strong
-    constexpr int32 MAX_TRIES = 8;
-    const FString HIDDEN_WORD = "planet";
+    const FString HIDDEN_WORD = LengthToWord[difficulty];
 
     // reinitialize vars
-    MyMaxTries = MAX_TRIES;
     MyHiddenWord = HIDDEN_WORD;
     MyCurrentTry = 1;
     bGameIsWon = false;
@@ -118,6 +126,6 @@ bool FBullCowGame::isLowercase(FString Word) const
             return false;
         }
     }
-    return false;
+    return true;
 }
 

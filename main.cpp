@@ -5,30 +5,42 @@
  */
 
 // preprocessor directive
+#pragma once  // because don't have a header
+
 #include <iostream>
 #include "FBullCowGame.h"
 
+// to make syntax Unreal friendly
 using FText = std::string;
 using int32 = int;
 
 // prototypes => contracts
+// function prototypes as outside a class
 void PrintIntro();
 void PlayGame();
 FText GetValidGuess();
 bool AskToPlayAgain();
 void PrintGameSummary();
+int32 ChooseDifficulty();
 
-FBullCowGame BCGame;     // instantiate a new game
+FBullCowGame BCGame; // instantiate a new game to re-use across plays
 
 
 // the entry point of our application
 int main()
 {
+    int32 difficulty = ChooseDifficulty();
+    BCGame.Reset(difficulty);
     bool bPlayAgain{false};
     do {
         PrintIntro();
         PlayGame();
         bPlayAgain = AskToPlayAgain();
+        if (bPlayAgain)
+        {
+            int32 difficulty = ChooseDifficulty();
+            BCGame.Reset(difficulty);
+        };
     }
     while (bPlayAgain);
 
@@ -36,13 +48,26 @@ int main()
 }
 
 
+int32 ChooseDifficulty(){
+    // creating difficulty store
+    int32 difficulty{0};
+
+    // grabbing user feedback
+    while(difficulty < 3 || difficulty > 6){
+        std::cout << "Please select a valid difficulty level (3-6): ";
+        std::cin >> difficulty;
+        std::cout << difficulty;
+    }
+
+    return difficulty;
+}
+
 // writing software goal is to manage complexity => future version can see whats up
 // Abstraction - considering things at a higher level
 // Encapsulation - making sure abstractions are adhered to, and other things can't get ahold of scope
 
 void PrintIntro()
 {
-    // introduce the game
     std::cout << "Welcome to Bulls and Cows, a fun word game.\n";
     std::cout << std::endl;
     std::cout << "          }   {         ___ " << std::endl;
@@ -65,7 +90,7 @@ FText GetValidGuess()
     do {
         // get a guess from the player
         int32 CurrentTry = BCGame.GetCurrentTry();
-        std::cout << "Try " << CurrentTry << " of " << BCGame.GetCurrentTry()
+        std::cout << "Try " << CurrentTry << " of " << BCGame.GetMaxTries();
         std::cout << ". Enter your guess: ";
         getline(std::cin, Guess);
 
@@ -92,7 +117,6 @@ FText GetValidGuess()
 
 void PlayGame()
 {
-    BCGame.Reset();
     int32 MaxTries = BCGame.GetMaxTries();
 
     // loop asking for guesses while the game
@@ -116,7 +140,7 @@ void PlayGame()
 
 bool AskToPlayAgain()
 {
-    std::cout << "Do you want to play again with the same hidden word (y/n)? ";
+    std::cout << "Do you want to play again (y/n)? ";
     FText Response{""};
     getline(std::cin, Response);
 
@@ -133,4 +157,3 @@ void PrintGameSummary()
         std::cout << "Better luck next time!\n";
     }
 }
-
