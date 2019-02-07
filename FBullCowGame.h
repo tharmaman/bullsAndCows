@@ -49,6 +49,9 @@ private:
     int32 MyMaxTries;
     FString MyHiddenWord;
     bool bGameIsWon;
+
+    bool IsIsogram(FString) const;
+    bool isLowercase(FString) const;
 };
 
 #endif //BULLSCOWS_FBULLCOWGAME_H
