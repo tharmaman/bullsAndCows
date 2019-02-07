@@ -28,7 +28,7 @@ void FBullCowGame::Reset()
     MyHiddenWord = HIDDEN_WORD;
     MyCurrentTry = 1;
     bGameIsWon = false;
-    
+
     return;
 }
 
